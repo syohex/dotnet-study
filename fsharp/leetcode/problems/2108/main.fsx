@@ -1,23 +1,20 @@
-open System.Collections.Generic
-
 let is_palindrome (str: string) : bool =
-    let rec inner (index: int) (orig: char array) (rev: char array) : bool =
-        if index = orig.Length then
-            true
-        elif orig[ index ] = rev[ index ] then
-            inner (index + 1) orig rev
-        else
-            false
+    let rec inner (orig: char list) (rev: char list) : bool =
+        match orig with
+        | [] -> true
+        | _ ->
+            if (List.head orig) = (List.head rev) then
+                inner (List.tail orig) (List.tail rev)
+            else
+                false
 
-    let reversed = str.ToCharArray() |> Array.rev
-    inner 0 (str.ToCharArray()) reversed
+    let reversed = str |> Seq.toList |> Seq.rev |> Seq.toList
+    inner (Seq.toList str) reversed
 
 let first_palindrome (words: string list) : string =
-    try
-        words |> List.find is_palindrome
-    with
-    | :? KeyNotFoundException -> ""
-    | _ -> failwith "never reach here"
+    match (words |> List.tryFind is_palindrome) with
+    | Some s -> s
+    | None -> ""
 
 first_palindrome [ "abc"
                    "car"
