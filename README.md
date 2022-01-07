@@ -1,1 +1,1 @@
-# My .NetCore programming
+# My .Net programming study
