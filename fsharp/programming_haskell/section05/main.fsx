@@ -94,3 +94,83 @@ let count c s =
     s |> Seq.filter (fun x -> x = c) |> Seq.length
 
 count 'l' "hello"
+
+// 5.5
+let let2int (c: char) : int = int c - int 'a'
+
+let int2let (n: int) : char = char (int 'a' + n)
+
+let2int 'a'
+int2let 0
+
+let shift (n: int) (c: char) =
+    match c with
+    | c when c >= 'a' && c <= 'z' -> int2let ((let2int c + n) % 26)
+    | c -> c
+
+shift 3 'a'
+shift 3 'z'
+
+let encode (n: int) (s: string) : string =
+    s
+    |> Seq.toList
+    |> Seq.map (fun c -> shift n c)
+    |> System.String.Concat
+
+encode 3 "haskell is fun"
+
+// 5.7
+let grid x y =
+    let xs = seq { 0 .. x }
+    let ys = seq { 0 .. y }
+
+    let mutable ret: (int * int) list = []
+
+    for a in xs do
+        for b in ys do
+            ret <- (a, b) :: ret
+
+    ret |> List.rev
+
+grid 1 2
+
+let square n = grid n n
+
+square 2
+
+let replicate (n: int) v =
+    let rec replicate' (m: int) (n: int) v =
+        if m = n then
+            []
+        else
+            v :: replicate' (m + 1) n v
+
+    replicate' 0 n v
+
+replicate 3 true
+replicate 3 "foo"
+
+let pyths n =
+    let xs = seq { 1 .. n }
+    let ys = seq { 1 .. n }
+    let zs = seq { 1 .. n }
+
+    let mutable ret = []
+
+    for x in xs do
+        for y in ys do
+            for z in zs do
+                if (x * x) + (y * y) = (z * z) then
+                    ret <- (x, y, z) :: ret
+
+    ret |> List.rev
+
+pyths 10
+
+let perfects n =
+    seq { 1 .. n }
+    |> Seq.filter (fun m -> (factors m |> Seq.sum) = m)
+    |> Seq.toList
+
+factors 6
+perfects 500
