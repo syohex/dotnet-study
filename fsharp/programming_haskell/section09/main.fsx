@@ -49,3 +49,40 @@ let rec eval (expr: Expr) : int =
 
 let expr1 = App(Add, Val(2), Val(3))
 eval expr1
+
+// 9.4
+let rec subs xss =
+    match xss with
+    | [] -> [ [] ]
+    | h :: t ->
+        let yss = subs t
+        yss @ List.map (fun xs -> h :: xs) yss
+
+subs [ 1; 2; 3 ]
+
+let rec interleave x xs =
+    match xs with
+    | [] -> [ [ x ] ]
+    | h :: t ->
+        (x :: h :: t)
+        :: List.map (fun ys -> h :: ys) (interleave x t)
+
+interleave 1 [ 2 .. 4 ]
+
+let rec perms xs =
+    match xs with
+    | [] -> [ [] ]
+    | h :: t ->
+        let xss =
+            perms t |> List.map (fun n -> interleave h n)
+
+        List.fold (fun acc ys -> List.append acc ys) [] xss
+
+perms [ 1; 2; 3 ]
+
+let choices: (int list -> int list list) =
+    subs
+    >> (List.map perms)
+    >> (List.fold (fun acc ys -> List.append acc ys) [])
+
+choices [ 1; 2; 3 ]
