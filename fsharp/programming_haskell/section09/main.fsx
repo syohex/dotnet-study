@@ -86,3 +86,15 @@ let choices: (int list -> int list list) =
     >> (List.fold (fun acc ys -> List.append acc ys) [])
 
 choices [ 1; 2; 3 ]
+
+// 9.6
+let rec split xs =
+    match xs with
+    | [] -> []
+    | _ :: [] -> []
+    | h :: t ->
+        ([ h ], t)
+        :: (split t
+            |> List.map (fun (ls, rs) -> (h :: ls, rs)))
+
+split [ 1; 2; 3; 4 ]
