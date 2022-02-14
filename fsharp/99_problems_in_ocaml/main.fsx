@@ -141,7 +141,7 @@ compress [ "a"
            "e"
            "e" ]
 
-// 9
+// problem 9
 let pack xs =
     let rec pack' xs prev tmp acc =
         match xs with
@@ -173,3 +173,34 @@ pack [ "a"
        "e"
        "e"
        "e" ]
+
+// problem 10
+let encode xs =
+    let rec encode' xs prev count acc =
+        match xs with
+        | [] -> ((count, prev) :: acc) |> List.rev
+        | y :: ys ->
+            if prev = y then
+                encode' ys prev (count + 1) acc
+            else
+                encode' ys y 1 ((count, prev) :: acc)
+
+    match xs with
+    | [] -> []
+    | y :: ys -> encode' ys y 1 []
+
+// [(4, "a"); (1, "b"); (2, "c"); (2, "a"); (1, "d"); (4, "e")]
+encode [ "a"
+         "a"
+         "a"
+         "a"
+         "b"
+         "c"
+         "c"
+         "a"
+         "a"
+         "d"
+         "e"
+         "e"
+         "e"
+         "e" ]
