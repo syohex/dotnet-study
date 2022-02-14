@@ -90,3 +90,22 @@ isPalindrome [ "x"; "a"; "m"; "a"; "x" ]
 
 // false
 isPalindrome [ "a"; "b" ]
+
+// problem 7
+type Node<'a> =
+    | One of 'a
+    | Many of Node<'a> list
+
+let rec flatten xs =
+    match xs with
+    | [] -> []
+    | x :: tail ->
+        match x with
+        | One v -> v :: (flatten tail)
+        | Many ys -> (flatten ys) @ (flatten tail)
+
+// ["a";"b";"c";"d";"e"]
+flatten [ One "a"
+          Many [ One "b"
+                 Many [ One "c"; One "d" ]
+                 One "e" ] ]
