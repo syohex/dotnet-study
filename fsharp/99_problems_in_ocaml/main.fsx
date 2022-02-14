@@ -69,3 +69,24 @@ let reverse xs =
 
 // ["c", "b", "a"]
 reverse [ "a"; "b"; "c" ]
+
+// problem 06
+let isPalindrome xs : bool =
+    let rec equal xs ys =
+        match xs, ys with
+        | [], [] -> true
+        | _, []
+        | [], _ -> false
+        | x :: tail1, y :: tail2 ->
+            if x <> y then
+                false
+            else
+                equal tail1 tail2
+
+    equal xs (xs |> List.rev)
+
+// true
+isPalindrome [ "x"; "a"; "m"; "a"; "x" ]
+
+// false
+isPalindrome [ "a"; "b" ]
