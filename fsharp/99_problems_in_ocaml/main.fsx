@@ -141,3 +141,35 @@ compress [ "a"
            "e"
            "e" ]
 
+// 9
+let pack xs =
+    let rec pack' xs prev tmp acc =
+        match xs with
+        | [] -> (tmp :: acc) |> List.rev
+        | y :: ys ->
+            if prev = y then
+                pack' ys prev (prev :: tmp) acc
+            else
+                pack' ys y [ y ] (tmp :: acc)
+
+    match xs with
+    | [] -> []
+    | y :: ys -> pack' ys y [ y ] []
+
+
+// [["a"; "a"; "a"; "a"]; ["b"]; ["c"; "c"]; ["a"; "a"]; ["d"; "d"]; ["e"; "e"; "e"; "e"]]
+pack [ "a"
+       "a"
+       "a"
+       "a"
+       "b"
+       "c"
+       "c"
+       "a"
+       "a"
+       "d"
+       "d"
+       "e"
+       "e"
+       "e"
+       "e" ]
