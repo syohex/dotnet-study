@@ -109,3 +109,35 @@ flatten [ One "a"
           Many [ One "b"
                  Many [ One "c"; One "d" ]
                  One "e" ] ]
+
+// problem 8
+let compress xs =
+    let rec compress' xs prev acc =
+        match xs with
+        | [] -> (prev :: acc) |> List.rev
+        | y :: ys ->
+            if prev = y then
+                compress' ys prev acc
+            else
+                compress' ys y (prev :: acc)
+
+    match xs with
+    | [] -> []
+    | y :: ys -> compress' ys y []
+
+// ["a"; "b"; "c"; "a"; "d"; "e"]
+compress [ "a"
+           "a"
+           "a"
+           "a"
+           "b"
+           "c"
+           "c"
+           "a"
+           "a"
+           "d"
+           "e"
+           "e"
+           "e"
+           "e" ]
+
