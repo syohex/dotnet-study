@@ -247,3 +247,19 @@ rotate
       "g"
       "h" ]
     (-2)
+
+// problem 20
+let removeAt n xs =
+    let rec removeAt' i n xs acc =
+        match xs with
+        | [] -> acc |> List.rev
+        | y :: ys ->
+            if i = n then
+                (acc |> List.rev) @ ys
+            else
+                removeAt' (i + 1) n ys (y :: acc)
+
+    removeAt' 0 n xs []
+
+// ["a"; "c"; "d"]
+removeAt 1 [ "a"; "b"; "c"; "d" ]
