@@ -155,3 +155,33 @@ drop
       "i"
       "j" ]
     3
+
+// problem 17
+let split xs n =
+    let rec split' i xs n acc =
+        match xs with
+        | [] -> (acc |> List.rev, [])
+        | y :: ys ->
+            if i = n then
+                (((y :: acc) |> List.rev), ys)
+            else
+                split' (i + 1) ys n (y :: acc)
+
+    split' 1 xs n []
+
+// (["a"; "b"; "c"], ["d"; "e"; "f"; "g"; "h"; "i"; "j"])
+split
+    [ "a"
+      "b"
+      "c"
+      "d"
+      "e"
+      "f"
+      "g"
+      "h"
+      "i"
+      "j" ]
+    3
+
+// (["a"; "b"; "c"; "d"], [])
+split [ "a"; "b"; "c"; "d" ] 5
