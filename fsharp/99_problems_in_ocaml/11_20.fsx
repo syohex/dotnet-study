@@ -213,3 +213,37 @@ slice
       "j" ]
     2
     6
+
+// problem 19
+let rotate xs n =
+    let len =
+        if n >= 0 then
+            n
+        else
+            (List.length xs) + n
+
+    (List.skip len xs) @ (List.take len xs)
+
+// ["d"; "e"; "f"; "g"; "h"; "a"; "b"; "c"]
+rotate
+    [ "a"
+      "b"
+      "c"
+      "d"
+      "e"
+      "f"
+      "g"
+      "h" ]
+    3
+
+// ["g"; "h"; "a"; "b"; "c"; "d"; "e"; "f"]
+rotate
+    [ "a"
+      "b"
+      "c"
+      "d"
+      "e"
+      "f"
+      "g"
+      "h" ]
+    (-2)
