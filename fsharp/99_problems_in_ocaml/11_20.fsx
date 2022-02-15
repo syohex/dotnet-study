@@ -111,3 +111,20 @@ let duplicate xs =
 
 // ["a"; "a"; "b"; "b"; "c"; "c"; "c"; "c"; "d"; "d"]
 duplicate [ "a"; "b"; "c"; "c"; "d" ]
+
+// problem 15
+let replicate xs n =
+    let rec replicate' xs n acc =
+        match xs with
+        | [] -> acc |> List.rev
+        | y :: ys ->
+            let newAcc =
+                List.init n id
+                |> List.fold (fun acc _ -> y :: acc) acc
+
+            replicate' ys n newAcc
+
+    replicate' xs n []
+
+// ["a"; "a"; "a"; "b"; "b"; "b"; "c"; "c"; "c"]
+replicate [ "a"; "b"; "c" ] 3
