@@ -128,3 +128,30 @@ let replicate xs n =
 
 // ["a"; "a"; "a"; "b"; "b"; "b"; "c"; "c"; "c"]
 replicate [ "a"; "b"; "c" ] 3
+
+// problem 16
+let drop xs n =
+    let rec drop' i xs n acc =
+        match xs with
+        | [] -> acc |> List.rev
+        | y :: ys ->
+            if i = n then
+                drop' (i + 1) ys n acc
+            else
+                drop' (i + 1) ys n (y :: acc)
+
+    drop' 1 xs n []
+
+// ["a"; "b"; "d"; "e"; "g"; "h"; "j"]
+drop
+    [ "a"
+      "b"
+      "c"
+      "d"
+      "e"
+      "f"
+      "g"
+      "h"
+      "i"
+      "j" ]
+    3
