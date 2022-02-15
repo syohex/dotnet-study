@@ -185,3 +185,31 @@ split
 
 // (["a"; "b"; "c"; "d"], [])
 split [ "a"; "b"; "c"; "d" ] 5
+
+// problem 18
+let slice xs m n =
+    let rec slice' i xs m n acc =
+        match xs with
+        | [] -> acc |> List.rev
+        | y :: ys ->
+            if i >= m && i <= n then
+                slice' (i + 1) ys m n (y :: acc)
+            else
+                slice' (i + 1) ys m n acc
+
+    slice' 0 xs m n []
+
+// ["c"; "d"; "e"; "f"; "g"]
+slice
+    [ "a"
+      "b"
+      "c"
+      "d"
+      "e"
+      "f"
+      "g"
+      "h"
+      "i"
+      "j" ]
+    2
+    6
