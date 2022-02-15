@@ -99,3 +99,15 @@ encode3 [ "a"
           "e"
           "e"
           "e" ]
+
+// problem 14
+let duplicate xs =
+    let rec duplicate' xs acc =
+        match xs with
+        | [] -> acc |> List.rev
+        | y :: ys -> duplicate' ys (y :: y :: acc)
+
+    duplicate' xs []
+
+// ["a"; "a"; "b"; "b"; "c"; "c"; "c"; "c"; "d"; "d"]
+duplicate [ "a"; "b"; "c"; "c"; "d" ]
