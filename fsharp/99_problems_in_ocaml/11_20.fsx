@@ -39,3 +39,25 @@ encode2 [ "a"
           "e"
           "e"
           "e" ]
+
+// problem 12
+let decode xs =
+    let rec decode' xs acc =
+        match xs with
+        | [] -> acc |> List.rev
+        | y :: ys ->
+            match y with
+            | One v -> decode' ys (v :: acc)
+            | Many (count, c) ->
+                let zs = List.init count (fun _ -> c)
+                decode' ys (zs @ acc)
+
+    decode' xs []
+
+// ["a"; "a"; "a"; "a"; "b"; "c"; "c"; "a"; "a"; "d"; "e"; "e"; "e"; "e"]
+decode [ Many(4, "a")
+         One "b"
+         Many(2, "c")
+         Many(2, "a")
+         One "d"
+         Many(4, "e") ]
