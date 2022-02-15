@@ -61,3 +61,41 @@ decode [ Many(4, "a")
          Many(2, "a")
          One "d"
          Many(4, "e") ]
+
+// problem 13
+let encode3 xs =
+    let rec encode3' xs prev count acc =
+        match xs with
+        | [] ->
+            if count = 1 then
+                ((One prev) :: acc) |> List.rev
+            else
+                ((Many(count, prev)) :: acc) |> List.rev
+        | y :: ys ->
+            if prev = y then
+                encode3' ys prev (count + 1) acc
+            else if count = 1 then
+                encode3' ys y 1 ((One prev) :: acc)
+            else
+                encode3' ys y 1 ((Many(count, prev)) :: acc)
+
+    match xs with
+    | [] -> []
+    | y :: ys -> encode3' ys y 1 []
+
+// [Many (4, "a"); One "b"; Many (2, "c"); Many (2, "a"); One "d";
+//  Many (4, "e")]
+encode3 [ "a"
+          "a"
+          "a"
+          "a"
+          "b"
+          "c"
+          "c"
+          "a"
+          "a"
+          "d"
+          "e"
+          "e"
+          "e"
+          "e" ]
