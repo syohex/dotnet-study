@@ -39,3 +39,30 @@ range 4 9
 
 // [9; 8; 7; 6; 5; 4]
 range 9 4
+
+// problem 23
+let randSelect<'a> xs n =
+    let rec randSelect' i (r: System.Random) (xs: 'a []) n acc =
+        if i = n then
+            acc
+        else
+            let m = r.Next(0, (n - i))
+            let idx = (Array.length xs) - i - 1
+            let tmp = xs.[idx]
+            xs.[idx] <- xs.[m]
+            xs.[m] <- tmp
+            randSelect' (i + 1) r xs n (xs.[idx] :: acc)
+
+    let ys = xs |> List.toArray
+    randSelect' 0 (System.Random()) ys n []
+
+randSelect
+    [ "a"
+      "b"
+      "c"
+      "d"
+      "e"
+      "f"
+      "g"
+      "h" ]
+    3
