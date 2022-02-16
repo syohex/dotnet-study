@@ -83,3 +83,27 @@ let lottoSelect n m =
     lottoSelect' n m (System.Random()) Set.empty []
 
 lottoSelect 6 49
+
+// problem 25
+let permutation xs =
+    let rec permutation' i xs (rnd: System.Random) acc =
+        let len = Array.length xs
+
+        if i = len then
+            acc
+        else
+            let v = rnd.Next(len - i)
+            let last = len - i - 1
+            let tmp = xs.[last]
+            xs.[last] <- xs.[v]
+            xs.[v] <- tmp
+            permutation' (i + 1) xs rnd (xs.[last] :: acc)
+
+    permutation' 0 (xs |> List.toArray) (System.Random()) []
+
+permutation [ "a"
+              "b"
+              "c"
+              "d"
+              "e"
+              "f" ]
