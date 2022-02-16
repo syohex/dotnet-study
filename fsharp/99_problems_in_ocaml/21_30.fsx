@@ -107,3 +107,19 @@ permutation [ "a"
               "d"
               "e"
               "f" ]
+
+// problem 26
+let rec extract<'a> (n: int) (xs: 'a list) : 'a list list =
+    if n <= 0 then
+        [ [] ]
+    else
+        match xs with
+        | [] -> []
+        | y :: ys ->
+            let ps =
+                List.map (fun a -> y :: a) (extract (n - 1) ys)
+
+            let qs = extract n ys
+            ps @ qs
+
+extract 2 ["a"; "b"; "c"; "d"]
