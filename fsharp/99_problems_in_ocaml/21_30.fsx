@@ -66,3 +66,20 @@ randSelect
       "g"
       "h" ]
     3
+
+// problem 24
+let lottoSelect n m =
+    let rec lottoSelect' n m (rnd: System.Random) used acc =
+        if n = 0 then
+            acc
+        else
+            let v = rnd.Next(m + 1)
+
+            if Set.contains v used then
+                lottoSelect' n m rnd used acc
+            else
+                lottoSelect' (n - 1) m rnd (Set.add v used) (v :: acc)
+
+    lottoSelect' n m (System.Random()) Set.empty []
+
+lottoSelect 6 49
