@@ -20,3 +20,22 @@ insertAt "alfa" 4 [ "a"; "b"; "c"; "d" ]
 
 // ["a"; "b"; "c"; "d"; "x"]
 insertAt "x" 100 [ "a"; "b"; "c"; "d" ]
+
+// problem 22
+let range m n =
+    let rec range' m n acc =
+        if m > n then
+            acc |> List.rev
+        else
+            range' (m + 1) n (m :: acc)
+
+    if m < n then
+        range' m n []
+    else
+        range' n m [] |> List.rev
+
+// [4; 5; 6; 7; 8; 9]
+range 4 9
+
+// [9; 8; 7; 6; 5; 4]
+range 9 4
