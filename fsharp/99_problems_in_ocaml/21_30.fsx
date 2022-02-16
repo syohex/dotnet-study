@@ -122,4 +122,43 @@ let rec extract<'a> (n: int) (xs: 'a list) : 'a list list =
             let qs = extract n ys
             ps @ qs
 
-extract 2 ["a"; "b"; "c"; "d"]
+extract 2 [ "a"; "b"; "c"; "d" ]
+
+// TODO problem 27
+
+// problem 28
+let lengthSort<'a> (xss: 'a list list) = xss |> List.sortBy List.length
+
+// [["o"]; ["d"; "e"]; ["d"; "e"]; ["m"; "n"]; ["a"; "b"; "c"]; ["f"; "g"; "h"];
+//  ["i"; "j"; "k"; "l"]]
+lengthSort [ [ "a"; "b"; "c" ]
+             [ "d"; "e" ]
+             [ "f"; "g"; "h" ]
+             [ "d"; "e" ]
+             [ "i"; "j"; "k"; "l" ]
+             [ "m"; "n" ]
+             [ "o" ] ]
+
+let frequencySort<'a> (xss: 'a list list) =
+    let freq =
+        xss
+        |> List.map List.length
+        |> List.fold
+            (fun m n ->
+                match Map.tryFind n m with
+                | None -> Map.add n 1 m
+                | Some v -> Map.add n (v + 1) m)
+            Map.empty
+
+    xss
+    |> List.sortBy (fun xs -> Map.find (List.length xs) freq)
+
+// [["i"; "j"; "k"; "l"]; ["o"]; ["a"; "b"; "c"]; ["f"; "g"; "h"]; ["d"; "e"];
+//  ["d"; "e"]; ["m"; "n"]]
+frequencySort [ [ "a"; "b"; "c" ]
+                [ "d"; "e" ]
+                [ "f"; "g"; "h" ]
+                [ "d"; "e" ]
+                [ "i"; "j"; "k"; "l" ]
+                [ "m"; "n" ]
+                [ "o" ] ]
