@@ -191,10 +191,37 @@ not (coprime 20536 7826)
 
 // problem 34
 let phi n =
-    [1..(n-1)] |> List.filter (coprime n) |> List.length
+    [ 1 .. (n - 1) ]
+    |> List.filter (coprime n)
+    |> List.length
 
 // 4
 phi 10
 
 // 13
 phi 13
+
+// problem 35
+let factor n =
+    let rec div2 n acc =
+        if n % 2 <> 0 then
+            n, acc
+        else
+            div2 (n / 2) (2 :: acc)
+
+    let rec factor' n div acc =
+        if n = 1 then
+            acc |> List.rev
+        else if n % div = 0 then
+            factor' (n / div) div (div :: acc)
+        else
+            factor' n (div + 2) acc
+
+    let (n, acc) = div2 n []
+    factor' n 3 acc
+
+// [3; 3; 5; 7]
+factor 315
+
+// [11 17 23 229]
+factor 984929
