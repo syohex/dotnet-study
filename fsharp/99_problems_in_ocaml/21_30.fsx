@@ -179,3 +179,22 @@ gcd 20536 7826
 
 // 6
 gcd 270 192
+
+// problem 33
+let coprime a b = (gcd a b) = 1
+
+// true
+coprime 13 27
+
+// true
+not (coprime 20536 7826)
+
+// problem 34
+let phi n =
+    [1..(n-1)] |> List.filter (coprime n) |> List.length
+
+// 4
+phi 10
+
+// 13
+phi 13
