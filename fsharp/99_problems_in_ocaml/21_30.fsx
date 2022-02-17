@@ -162,3 +162,20 @@ frequencySort [ [ "a"; "b"; "c" ]
                 [ "i"; "j"; "k"; "l" ]
                 [ "m"; "n" ]
                 [ "o" ] ]
+
+// problem 32
+let gcd a b =
+    let rec gcd' a b =
+        let c = a % b
+        if c = 0 then b else gcd' b c
+
+    if a > b then gcd' a b else gcd' b a
+
+// 1
+gcd 13 27
+
+// 2
+gcd 20536 7826
+
+// 6
+gcd 270 192
