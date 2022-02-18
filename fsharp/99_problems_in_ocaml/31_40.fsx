@@ -100,3 +100,20 @@ let factor2 n =
 
 // [(3, 2); (5, 1); (7, 1)]
 factor2 315
+
+// problem 37
+let phiImproved n =
+    factor2 n
+    |> List.fold
+        (fun acc (div, count) ->
+            acc
+            * (div - 1)
+            * (int (System.Math.Pow(float div, float (count - 1)))))
+        1
+    |> int
+
+// 4
+phiImproved 10
+
+// 12
+phiImproved 13
