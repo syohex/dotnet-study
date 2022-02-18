@@ -129,3 +129,12 @@ let bench f arg =
 
 bench (fun n -> phi n) 10090
 bench (fun n -> phiImproved n) 10090
+
+// problem 39
+let allPrimes m n =
+    seq { m .. n }
+    |> Seq.filter (fun a -> (factor a |> List.length) = 1)
+    |> Seq.toList
+
+// 1000
+allPrimes 2 7920 |> List.length
