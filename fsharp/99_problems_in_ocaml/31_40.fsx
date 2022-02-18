@@ -138,3 +138,24 @@ let allPrimes m n =
 
 // 1000
 allPrimes 2 7920 |> List.length
+
+// problem 40
+let goldbach n =
+    let rec goldbach' primes s n =
+        match primes with
+        | [] -> (-1, -1)
+        | x :: xs ->
+            if Set.contains (n - x) s then
+                (x, n - x)
+            else
+                goldbach' xs s n
+
+    let primes = allPrimes 2 n
+    let s = Set.ofList primes
+    goldbach' primes s n
+
+// (5, 23)
+goldbach 28
+
+// (3, 3)
+goldbach 6
