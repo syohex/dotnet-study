@@ -117,3 +117,15 @@ phiImproved 10
 
 // 12
 phiImproved 13
+
+// problem 38
+let bench f arg =
+    let watch = new System.Diagnostics.Stopwatch()
+    watch.Start()
+    let ret = f arg
+    watch.Stop()
+
+    (ret, watch.Elapsed.TotalMilliseconds)
+
+bench (fun n -> phi n) 10090
+bench (fun n -> phiImproved n) 10090
