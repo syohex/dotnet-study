@@ -1,7 +1,7 @@
 let majorityElement1 (nums: int list) : int =
     nums
     |> List.countBy id
-    |> List.sortBy (fun (_, count) -> count)
+    |> List.sortBy snd
     |> List.rev
     |> List.head
     |> fst
