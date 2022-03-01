@@ -2,6 +2,11 @@ type LinkedList =
     | LinkEnd
     | LinkNode of int * LinkedList
 
+let rec toList (xs: LinkedList) : int list =
+    match xs with
+    | LinkEnd -> []
+    | LinkNode(v, tail) -> v :: toList tail
+
 let listLength (xs: LinkedList) : int =
     let rec listLength' xs acc =
         match xs with
@@ -70,4 +75,4 @@ sortList data2
 sortList LinkEnd
 
 // [-1,0,1,2,3,3,4,4,5]
-merge data1 data2 |> sortList
+merge data1 data2 |> sortList |> toList
