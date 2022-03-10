@@ -1,21 +1,50 @@
-let addTwoNumbers (l1: int list) (l2: int list) : int list =
-    let rec addTwoNumbers' (l1: int list) (l2: int list) (ret: int list) (carry: int) : int list =
-        if List.isEmpty l1 && List.isEmpty l2 then
+type LinkedList =
+    | ListEnd
+    | ListNode of int * LinkedList
+
+    static member toList lst =
+        let rec toList' lst acc =
+            match lst with
+            | ListEnd -> acc |> List.rev
+            | ListNode (v, rest) -> toList' rest (v :: acc)
+
+        toList' lst []
+
+    static member toNumber lst =
+        lst
+        |> LinkedList.toList
+        |> List.fold (fun acc n -> acc * 10 + n) 0
+
+let addTwoNumbers (l1: LinkedList) (l2: LinkedList) : LinkedList =
+    let rec addTwoNumbers' l1 l2 carry =
+        match l1, l2 with
+        | ListEnd, ListEnd ->
             if carry <> 0 then
-                addTwoNumbers' l1 l2 (carry :: ret) 0
+                ListNode(carry, ListEnd)
             else
-                ret
-        else
-            let e1 = if List.isEmpty l1 then 0 else List.head l1
-            let e2 = if List.isEmpty l2 then 0 else List.head l2
-            let r1 = if List.isEmpty l1 then [] else List.tail l1
-            let r2 = if List.isEmpty l2 then [] else List.tail l2
-            match e1 + e2 + carry with
-            | n when n >= 10 -> addTwoNumbers' r1 r2 ((n % 10) :: ret) 1
-            | n -> addTwoNumbers' r1 r2 (n :: ret) 0
+                ListEnd
+        | ListNode (v1, rest1), ListEnd ->
+            let sum = v1 + carry
+            ListNode(sum % 10, addTwoNumbers' rest1 l2 (sum / 10))
+        | ListEnd, ListNode (v2, rest2) ->
+            let sum = v2 + carry
+            ListNode(sum % 10, addTwoNumbers' l1 rest2 (sum / 10))
+        | ListNode (v1, rest1), ListNode (v2, rest2) ->
+            let sum = v1 + v2 + carry
+            ListNode(sum % 10, addTwoNumbers' rest1 rest2 (sum / 10))
 
-    addTwoNumbers' l1 l2 [] 0 |> List.rev
+    addTwoNumbers' l1 l2 0
 
-addTwoNumbers [ 2; 4; 3 ] [ 5; 6; 4 ]
-addTwoNumbers [ 0 ] [ 0 ]
-addTwoNumbers [ 9; 9; 9; 9 ] [ 9; 9 ]
+// [7, 0, 8]
+addTwoNumbers (ListNode(2, ListNode(4, ListNode(3, ListEnd)))) (ListNode(5, ListNode(6, ListNode(4, ListEnd))))
+|> LinkedList.toNumber
+
+// [0]
+addTwoNumbers (ListNode(0, ListEnd)) (ListNode(0, ListEnd))
+|> LinkedList.toNumber
+
+// [8, 9, 9, 9, 0, 0, 0, 1]
+addTwoNumbers
+    (ListNode(9, ListNode(9, ListNode(9, ListNode(9, ListNode(9, ListNode(9, ListNode(9, ListEnd))))))))
+    (ListNode(9, ListNode(9, ListNode(9, ListNode(9, ListEnd)))))
+|> LinkedList.toNumber
