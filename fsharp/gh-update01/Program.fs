@@ -10,20 +10,26 @@ let downloadURL (version: string) : string =
 
 let homeDirectory () : string =
     let v = Environment.GetEnvironmentVariable("HOME")
+
     match v with
     | null -> failwith "could not get home directory path"
     | _ -> v
 
 let rec findArchiveAndExtract (archive: TarInputStream) (pattern: string) (dest: string) =
     let entry = archive.GetNextEntry()
+
     match entry with
-    | null -> Error($"could not find entry matching with {pattern}")
+    | null ->
+        archive.Close()
+        Error($"could not find entry matching with {pattern}")
     | entry ->
-        if entry.IsDirectory || (entry.Name.EndsWith(pattern) |> not) then
+        if entry.IsDirectory
+           || (entry.Name.EndsWith(pattern) |> not) then
             findArchiveAndExtract archive pattern dest
         else
-            let outStream = new FileStream(dest, FileMode.Create)
+            use outStream = new FileStream(dest, FileMode.Create)
             archive.CopyEntryContents(outStream)
+            archive.Close()
             Ok(())
 
 
@@ -36,11 +42,12 @@ let downloadAndExtract (version: string) =
         let gzipStream = new GZipInputStream(stream)
 
         let tarArchive = new TarInputStream(gzipStream, Text.Encoding.UTF8)
-        let dest = Path.Combine(homeDirectory(), "bin", "gh")
+        let dest = Path.Combine(homeDirectory (), "bin", "gh")
 
-        return match findArchiveAndExtract tarArchive "bin/gh" dest with
-                | Error(v) -> Error(v)
-                | Ok(_) -> Ok(dest)
+        return
+            match findArchiveAndExtract tarArchive "bin/gh" dest with
+            | Error (v) -> Error(v)
+            | Ok (_) -> Ok(dest)
     }
 
 let setExecutableFlag (path: string) =
@@ -58,12 +65,19 @@ let generateZshCompletion (ghPath: string) =
     let mutable cmd = new Process()
     cmd.StartInfo.FileName <- ghPath
     cmd.StartInfo.Arguments <- "completion --shell zsh"
-    cmd.StartInfo.RedirectStandardInput <- true
+    cmd.StartInfo.UseShellExecute <- false
+    cmd.StartInfo.RedirectStandardOutput <- true
 
     if cmd.Start() then
-        let dest = Path.Combine(homeDirectory(), ".zsh", "completions", "_gh")
-        let f = new StreamWriter(dest)
-        cmd.StandardOutput.ReadToEnd() |> f.Write
+        let dest = Path.Combine(homeDirectory (), ".zsh", "completions", "_gh")
+        use f = new StreamWriter(dest)
+
+        cmd.OutputDataReceived.Add (fun e ->
+            e.Data |> f.Write
+            "\n" |> f.Write)
+
+        cmd.BeginOutputReadLine()
+        cmd.WaitForExit()
         Ok(())
     else
         Error("failed to run 'gh completion' command")
@@ -77,23 +91,29 @@ let main args =
         1
     | _ ->
         let version = args.[0]
-        let r = downloadAndExtract version |> Async.RunSynchronously
+
+        let r =
+            downloadAndExtract version
+            |> Async.RunSynchronously
+
         match r with
-        | Error(v) ->
+        | Error (v) ->
             printfn $"error: {v}"
             1
-        | Ok(ghPath) ->
+        | Ok (ghPath) ->
             printfn "Success download and extract 'gh' binary"
+
             match setExecutableFlag ghPath with
-            | Error(v) ->
+            | Error (v) ->
                 printfn $"error: {v}"
                 1
-            | Ok(_) ->
+            | Ok (_) ->
                 printfn $"Success to set executable flag to {ghPath}"
+
                 match generateZshCompletion ghPath with
-                | Error(v) ->
+                | Error (v) ->
                     printfn $"error: {v}"
                     1
-                | Ok(_) ->
+                | Ok (_) ->
                     printfn "Complete!!"
                     0
