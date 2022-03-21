@@ -61,7 +61,7 @@ let generateZshCompletion (ghPath: string) =
     cmd.StartInfo.RedirectStandardInput <- true
 
     if cmd.Start() then
-        let dest = Path.Combine(homeDirectory(), ".zsh", ".completions", "_gh")
+        let dest = Path.Combine(homeDirectory(), ".zsh", "completions", "_gh")
         let f = new StreamWriter(dest)
         cmd.StandardOutput.ReadToEnd() |> f.Write
         Ok(())
