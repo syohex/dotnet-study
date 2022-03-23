@@ -2,11 +2,10 @@ let brokenCalc (startValue: int) (target: int) : int =
     let rec brokenCalc' startValue target count =
         if target <= startValue then
             count + startValue - target
+        else if target % 2 = 1 then
+            brokenCalc' startValue (target + 1) (count + 1)
         else
-            if target % 2 = 1 then
-                brokenCalc' startValue (target + 1) (count + 1)
-            else
-                brokenCalc' startValue (target / 2) (count + 1)
+            brokenCalc' startValue (target / 2) (count + 1)
 
     brokenCalc' startValue target 0
 
