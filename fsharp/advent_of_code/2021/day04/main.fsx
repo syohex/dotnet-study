@@ -86,23 +86,60 @@ let rec problem1' (input: int list) (cards: Card list) : int =
             let score = unmarkedScore c
             score * number
 
+let rec problem2' (input: int list) (cards: Card list) : int =
+    match input with
+    | [] -> failwith "never reach here"
+    | number :: rest ->
+        cards |> List.iter (fun c -> checkNumber number c)
+        let cards' = cards |> List.filter (fun c -> c |> checkWin |> not)
+        match cards' with
+        | [] ->
+            let score = unmarkedScore (List.head cards)
+            score * number
+        | _ ->
+            problem2' rest cards'
+
 let problem1 (bingo: Bingo) : int = problem1' bingo.Input bingo.Cards
+
+let problem2 (bingo: Bingo) : int = problem2' bingo.Input bingo.Cards
 
 let test () =
     let input = File.ReadLines("test.txt") |> Seq.toList
     let bingo = parseInput input
-    let ret = problem1 bingo
+    let ret1 = problem1 bingo
 
-    if ret = 4512 then
-        printfn "OK test1"
+    if ret1 = 4512 then
+        printfn "OK part1 test"
     else
-        failwith $"Error: got: {ret}, expected: 4512"
+        failwith $"Error: got: {ret1}, expected: 4512"
 
-let input = File.ReadLines("input.txt") |> Seq.toList
-let bingo = parseInput input
-let ret1 = problem1 bingo
+    let ret2 = problem2 bingo
+
+    if ret2 = 1924 then
+        printfn "OK part2 test"
+    else
+        failwith $"Error: got: {ret2}, expected: 1924"
+
+test()
+
+let input1 =
+    File.ReadLines("input.txt") |> Seq.toList
+
+let bingo1 = parseInput input1
+let ret1 = problem1 bingo1
 
 if ret1 = 10374 then
-    printfn "Part1: OK"
+    printfn $"Part1: {ret1}"
 else
-    failwith $"Error: got: {ret1}, expected: 10374"
+    failwith $"Error Part1: got: {ret1}, expected: 10374"
+
+let input2 =
+    File.ReadLines("input.txt") |> Seq.toList
+
+let bingo2 = parseInput input2
+let ret2 = problem2 bingo2
+
+if ret2 = 24742 then
+    printfn $"Part2: {ret2}"
+else
+    failwith $"Error Part2: got: {ret2}, expected: 24742"
