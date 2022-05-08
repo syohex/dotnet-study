@@ -50,3 +50,12 @@ let lst2 =
 let ni2 = NestedIterator.init lst2
 // [1;4;6]
 check ni2
+
+let lst3 =
+    [ List([ Int(1); Int(2) ])
+      Int(3)
+      List([ Int(4); Int(5) ]) ]
+
+let ni3 = NestedIterator.init lst3
+// [1;2;3;4;5]
+check ni3
