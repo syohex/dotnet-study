@@ -35,3 +35,7 @@ isToeplitzMatrix matrix2
 let matrix3 = array2D [ [ 84 ] ]
 // true
 isToeplitzMatrix matrix3
+
+let matrix4 = array2D [ [ 1; 3; 2 ]; [ 2; 1; 4 ] ]
+// false
+isToeplitzMatrix matrix4
