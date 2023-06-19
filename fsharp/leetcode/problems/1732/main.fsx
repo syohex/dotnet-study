@@ -3,7 +3,7 @@ let largestAltitude (gain: int list) : int =
     |> List.fold
         (fun (alt, ret) n ->
             let alt' = alt + n
-            alt', System.Math.Max(ret, alt))
+            alt', System.Math.Max(ret, alt'))
         (0, 0)
     |> snd
 
