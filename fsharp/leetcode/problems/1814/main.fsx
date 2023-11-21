@@ -5,13 +5,15 @@ let rev (n: int) : int =
     rev' n 0
 
 let countNicePairs (nums: int list) : int =
+    let modulo = 1_000_000_007
+
     let rec countNicePairs' diffs dp acc =
         match diffs with
         | [] -> acc
         | h :: t ->
             match Map.tryFind h dp with
             | None -> countNicePairs' t (Map.add h 1 dp) acc
-            | Some(v) -> countNicePairs' t (Map.add h (v + 1) dp) (acc + v)
+            | Some(v) -> countNicePairs' t (Map.add h (v + 1) dp) ((acc + v) % modulo)
 
     let diffs = nums |> List.map (fun n -> n - rev n)
     countNicePairs' diffs Map.empty 0
