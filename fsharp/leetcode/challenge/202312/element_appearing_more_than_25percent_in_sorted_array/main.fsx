@@ -1,8 +1,7 @@
 let findSpecialInteger (arr: int list) : int =
     arr
     |> List.windowed ((List.length arr / 4) + 1)
-    |> List.filter (fun a -> List.head a = List.last a)
-    |> List.head
+    |> List.find (fun a -> List.head a = List.last a)
     |> List.head
 
 // 6
