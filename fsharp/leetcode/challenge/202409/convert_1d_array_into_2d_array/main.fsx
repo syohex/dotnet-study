@@ -8,14 +8,15 @@ let construct2DArray (original: int list) (m: int) (n: int) : int[,] =
 
     if List.length original <> m * n then
         Array2D.zeroCreate 0 0
-    let acc = Array2D.zeroCreate m n
-    construct2DArray' (List.indexed original) acc
+    else
+        let acc = Array2D.zeroCreate m n
+        construct2DArray' (List.indexed original) acc
 
 // [[1,2],[3,4]]
-construct2DArray [1;2;3;4] 2 2
+construct2DArray [ 1; 2; 3; 4 ] 2 2
 
 // [[1,2,3]]
-construct2DArray [1;2;3] 1 3
+construct2DArray [ 1; 2; 3 ] 1 3
 
 // [[]]
-construct2DArray [1;2] 1 1
+construct2DArray [ 1; 2 ] 1 1
