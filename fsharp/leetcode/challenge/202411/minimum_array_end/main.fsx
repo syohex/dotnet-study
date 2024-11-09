@@ -10,7 +10,6 @@ let minEnd (n: int) (x: int) : int64 =
         | [], [] ->
             acc
             |> List.rev
-            |> List.skipWhile ((=) 0)
             |> List.fold (fun acc n -> acc * 2L + int64 n) 0L
         | _, [] -> failwith "never reach here"
         | [], h :: t -> minEnd' [] t (h :: acc)
