@@ -15,7 +15,10 @@ let canChange (start: string) (target: string) : bool =
 
     let cs1 = nonEmptyPositions start
     let cs2 = nonEmptyPositions target
-    canChange' cs1 cs2
+    if List.length cs1 <> List.length cs2 then
+        false
+    else
+        canChange' cs1 cs2
 
 // true
 canChange "_L__R__R_" "L______RR"
