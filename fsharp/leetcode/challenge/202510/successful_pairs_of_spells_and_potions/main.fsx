@@ -1,21 +1,21 @@
 let successfulPairs (spells: int list) (potions: int list) (success: int64) : int list =
-    let rec lowerBound left right spell (vals: int[]) =
+    let rec lowerBound left right fn (vals: int[]) =
         if left >= right then
             left
         else
             let mid = left + (right - left) / 2
 
-            if int64 (spell * vals.[mid]) < success then
-                lowerBound (mid + 1) right spell vals
+            if fn vals.[mid] < success then
+                lowerBound (mid + 1) right fn vals
             else
-                lowerBound left mid spell vals
+                lowerBound left mid fn vals
 
     let potions = potions |> List.sort |> List.toArray
     let len = potions.Length
 
     spells
     |> List.map (fun spell ->
-        let pos = lowerBound 0 len spell potions
+        let pos = lowerBound 0 len (fun v -> int64 <| v * spell) potions
         len - pos)
 
 // [4,0,3]
